@@ -1,0 +1,21 @@
+{
+  "name": "seg-freq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dl": "node ./scripts/download.js",
+    "ex": "node ./scripts/extract.js",
+    "bex": "node ./scripts/betterExtract.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "csv-parser": "^3.0.0",
+    "gtfs-stream": "^2.2.0",
+    "node-fetch": "^2.6.7",
+    "unzip-stream": "^0.3.4"
+  }
+}
