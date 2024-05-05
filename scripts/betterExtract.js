@@ -250,6 +250,8 @@ fs.createReadStream('./feed.zip')
                               features: stopFeatures
                             }))
                             fs.writeFileSync('./out/pairs.json', JSON.stringify(stopPairs));
+                            fs.writeFileSync('./out/index.html', fs.readFileSync('./index.html'));
+
                             console.log(`Done with writing to files in ${((Date.now() - start) / 1000).toFixed(2)}s`);
                           })
                       })
