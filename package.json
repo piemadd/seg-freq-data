@@ -6,7 +6,8 @@
   "scripts": {
     "dl": "node ./scripts/download.js",
     "ex": "node ./scripts/extract.js",
-    "bex": "node ./scripts/betterExtract.js"
+    "bex": "node ./scripts/betterExtract.js",
+    "all": "npm run dl && npm run bex"
   },
   "keywords": [],
   "author": "",
