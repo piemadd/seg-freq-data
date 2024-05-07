@@ -222,7 +222,8 @@ fs.createReadStream('./feed.zip')
                               stopFeatures.push({
                                 type: "Feature",
                                 properties: {
-                                  name: stop.name
+                                  name: stop.name,
+                                  stopID: stopKeys[i],
                                 },
                                 geometry: {
                                   coordinates: [
