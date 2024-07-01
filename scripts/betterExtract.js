@@ -42,6 +42,8 @@ fs.createReadStream('./feed.zip')
     fs.createReadStream('./feed/routes.txt')
       .pipe(csv())
       .on('data', (data) => {
+        if (data.route_type != '1') return;
+
         routes[data.route_id] = {
           name: data.route_long_name,
           type: data.route_type,
@@ -70,6 +72,8 @@ fs.createReadStream('./feed.zip')
               .pipe(csv())
               .on('data', (data) => {
                 if (!calendar[data.service_id]) return; //trip is not currently valid
+
+                if (!routes[data.route_id]) return; //route doesnt exist
 
                 routes[data.route_id].trips[data.trip_id] = {
                   shapeID: data.shape_id,
@@ -105,8 +109,9 @@ fs.createReadStream('./feed.zip')
                     fs.createReadStream('./feed/stop_times.txt')
                       .pipe(csv())
                       .on('data', (data) => {
-                        if (!trips[data.trip_id]) return; //not a valid trips
+                        if (!trips[data.trip_id]) return; //not a valid trip
                         const routeID = trips[data.trip_id];
+                        if (!routes[routeID]) return; //not a valid route
                         const stopID = data.stop_id; //parentStops[data.stop_id] ?? data.stop_id;
                         routes[routeID].trips[data.trip_id].stopTimes.push({
                           stopID: stopID,
