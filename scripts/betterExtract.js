@@ -230,13 +230,14 @@ fs.createReadStream('./feed.zip')
                             for (let i = 0; i < stopKeys.length; i++) {
                               const stop = stops[stopKeys[i]];
 
-                              if (!stop.active) return; //dont show the stop
+                              if (!stop.active) continue; //dont show the stop
 
                               stopFeatures.push({
                                 type: "Feature",
                                 properties: {
                                   name: stop.name,
                                   stopID: stopKeys[i],
+                                  active: stop.active
                                 },
                                 geometry: {
                                   coordinates: [
