@@ -99,6 +99,7 @@ fs.createReadStream('./feed.zip')
                       name: data.stop_name,
                       lat: parseFloat(data.stop_lat),
                       lon: parseFloat(data.stop_lon),
+                      active: false,
                     };
                   })
                   .on('end', () => {
@@ -110,6 +111,7 @@ fs.createReadStream('./feed.zip')
                         if (!trips[data.trip_id]) return; //not a valid trip
                         const routeID = trips[data.trip_id];
                         if (!routes[routeID]) return; //not a valid route
+
                         const stopID = parentStops[data.stop_id] ?? data.stop_id;
                         routes[routeID].trips[data.trip_id].stopTimes.push({
                           stopID: stopID,
@@ -117,6 +119,8 @@ fs.createReadStream('./feed.zip')
                           departureTimeInt: parseInt(data.departure_time.replaceAll(':', '')),
                           stopSequence: parseInt(data.stop_sequence)
                         })
+
+                        stops[stopID].active = true
                       })
                       .on('end', async () => {
                         console.log(`Done with stop times ingestion in ${((Date.now() - start) / 1000).toFixed(2)}s`);
@@ -225,6 +229,9 @@ fs.createReadStream('./feed.zip')
                             const stopKeys = Object.keys(stops);
                             for (let i = 0; i < stopKeys.length; i++) {
                               const stop = stops[stopKeys[i]];
+
+                              if (!stop.active) return; //dont show the stop
+
                               stopFeatures.push({
                                 type: "Feature",
                                 properties: {
