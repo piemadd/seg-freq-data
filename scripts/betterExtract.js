@@ -90,12 +90,10 @@ fs.createReadStream('./feed.zip')
                 fs.createReadStream('./feed/stops.txt')
                   .pipe(csv())
                   .on('data', (data) => {
-                    /* not taking advantages of parents
                     if (data.parent_station.length > 0) {
                       parentStops[data.stop_id] = data.parent_station;
                       return;
                     }
-                    */
 
                     stops[data.stop_id] = {
                       name: data.stop_name,
@@ -112,7 +110,7 @@ fs.createReadStream('./feed.zip')
                         if (!trips[data.trip_id]) return; //not a valid trip
                         const routeID = trips[data.trip_id];
                         if (!routes[routeID]) return; //not a valid route
-                        const stopID = data.stop_id; //parentStops[data.stop_id] ?? data.stop_id;
+                        const stopID = parentStops[data.stop_id] ?? data.stop_id;
                         routes[routeID].trips[data.trip_id].stopTimes.push({
                           stopID: stopID,
                           departureTime: data.departure_time,
@@ -160,7 +158,10 @@ fs.createReadStream('./feed.zip')
                                   const thisStopTime = stopTimes[k];
                                   const nextStopTime = stopTimes[k + 1];
 
-                                  const stopPairCode = `${thisStopTime.stopID}_${nextStopTime.stopID}`;
+                                  const thiStopTimeStopID = parentStops[thisStopTime.stopID] ?? thisStopTime.stopID;
+                                  const nextStopTimeStopID = parentStops[nextStopTime.stopID] ?? nextStopTime.stopID;
+
+                                  const stopPairCode = `${thiStopTimeStopID}_${nextStopTimeStopID}`;
                                   const stopPairHour = thisStopTime.departureTime.split(':')[0];
 
                                   //need to add all possible days of week and hours
