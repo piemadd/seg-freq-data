@@ -24,7 +24,7 @@ let lineFeatures = [];
 let stopFeatures = [];
 
 let start = Date.now();
-const nowInt = dateToDateNum(new Date());
+const nowInt = dateToDateNum(new Date("2013-11-15T12:00:00Z"));
 
 if (fs.existsSync('./feed')) fs.rmSync('./feed', { recursive: true });
 fs.mkdirSync('./feed');
