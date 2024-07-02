@@ -219,6 +219,7 @@ fs.createReadStream('./feed.zip')
                             for (let i = 0; i < stopPairShapesKeys.length; i++) {
                               lineFeatures.push({
                                 ...stopPairShapes[stopPairShapesKeys[i]],
+                                id: stopPairShapesKeys[i],
                                 properties: {
                                   segment: stopPairShapesKeys[i],
                                   timings: stopPairs[stopPairShapesKeys[i]]
