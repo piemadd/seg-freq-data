@@ -189,8 +189,23 @@ fs.createReadStream('./feed.zip')
                                     const startPoint = turf.point([stops[thisStopTime.stopID].lon, stops[thisStopTime.stopID].lat]);
                                     const endPoint = turf.point([stops[nextStopTime.stopID].lon, stops[nextStopTime.stopID].lat]);
 
+
+                                    // doing this instead of immediately line.slice()ing the points above because on some systems (see the CTA), a trip will double back on itself, which might lead to a line going all the way to a turnaround and back again, instad of just the 1 stop distance 
+                                    const startPointNearest = turf.nearestPointOnLine(tripShape, startPoint);
+                                    const endPointNearest = turf.nearestPointOnLine(tripShape, endPoint);
+
+                                    const earliestStartPoint = tripShape.geometry.coordinates.find((coord) =>
+                                      Math.abs(startPointNearest.geometry.coordinates[0] - coord[0]) < 0.0001 &&
+                                      Math.abs(startPointNearest.geometry.coordinates[1] - coord[1]) < 0.0001
+                                    ) ?? startPointNearest;
+
+                                    const earliestEndPoint = tripShape.geometry.coordinates.find((coord) =>
+                                      Math.abs(endPointNearest.geometry.coordinates[0] - coord[0]) < 0.0001 &&
+                                      Math.abs(endPointNearest.geometry.coordinates[1] - coord[1]) < 0.0001 
+                                    ) ?? endPointNearest;
+
                                     //getting segment
-                                    const slicedShape = turf.lineSlice(startPoint, endPoint, tripShape);
+                                    const slicedShape = turf.lineSlice(earliestStartPoint, earliestEndPoint, tripShape);
 
                                     stopPairShapes[stopPairCode] = slicedShape;
                                   }
